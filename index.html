@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Eve — Con la verdad en las manos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF8F3;
+    --cream-card: #FFFDFB;
+    --blush: #F5E6E4;
+    --blush-deep: #E8CFCB;
+    --gold: #C89B6E;
+    --gold-light: #DFC09E;
+    --burgundy: #4A1C24;
+    --burgundy-soft: #6D313B;
+    --text-main: #3A2629;
+    --text-muted: #765B5F;
+    --shadow-soft: 0 14px 40px rgba(74, 28, 36, 0.08);
+    --shadow-card: 0 8px 24px rgba(74, 28, 36, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--cream);
+    color: var(--text-main);
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.85;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  #particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,155,110,0.28) 0%, rgba(245,230,228,0) 70%);
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(105vh) scale(0.8); opacity: 0; }
+    20% { opacity: 0.7; }
+    80% { opacity: 0.7; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stage-hidden { display: none; opacity: 0; }
+  .stage-visible {
+    display: block;
+    animation: revealStage 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes revealStage {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  header.hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .eyebrow {
+    font-size: 0.82rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+
+  h1.title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    color: var(--burgundy);
+    line-height: 1.18;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  h1.title em { font-style: italic; color: var(--burgundy-soft); font-weight: 500; }
+
+  .hero-sub {
+    max-width: 560px;
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    margin-bottom: 38px;
+  }
+
+  .divider-ornament {
+    width: 90px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 36px;
+  }
+
+  .btn-start, .btn-next-stage {
+    background: var(--burgundy);
+    color: var(--cream);
+    border: 1px solid var(--burgundy);
+    padding: 15px 34px;
+    border-radius: 50px;
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    box-shadow: 0 10px 25px rgba(74, 28, 36, 0.18);
+  }
+
+  .btn-start:hover, .btn-next-stage:hover {
+    background: var(--burgundy-soft);
+    transform: translateY(-2px);
+  }
+
+  .stage-gate {
+    text-align: center;
+    margin-top: 34px;
+    padding-top: 10px;
+  }
+
+  .stage-gate-hint {
+    display: block;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  section.chapter-section { padding: 55px 0 30px; }
+  .section-intro { text-align: center; margin-bottom: 36px; }
+  .section-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.65rem, 4vw, 2.25rem);
+    color: var(--burgundy);
+    margin-bottom: 10px;
+  }
+  .section-intro p { color: var(--text-muted); font-size: 0.98rem; }
+
+  .accordion-list { display: flex; flex-direction: column; gap: 20px; }
+
+  .chapter-card {
+    background: var(--cream-card);
+    border: 1px solid var(--blush-deep);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .chapter-card:hover { box-shadow: var(--shadow-soft); }
+
+  .chapter-header {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 26px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    cursor: pointer;
+    gap: 16px;
+  }
+
+  .chapter-meta {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-family: 'Lora', serif;
+  }
+
+  .chapter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.32rem;
+    color: var(--burgundy);
+    font-weight: 600;
+  }
+
+  .chapter-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--blush);
+    color: var(--burgundy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: transform 0.35s ease, background 0.35s ease;
+  }
+
+  .chapter-card.open .chapter-icon {
+    transform: rotate(45deg);
+    background: var(--burgundy);
+    color: var(--cream);
+  }
+
+  .chapter-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .chapter-content {
+    padding: 4px 28px 32px;
+    border-top: 1px solid rgba(232, 207, 203, 0.5);
+    color: var(--text-main);
+    font-size: 1.03rem;
+  }
+  .chapter-content p { margin-top: 18px; }
+
+  .highlight-box {
+    margin-top: 22px;
+    background: linear-gradient(135deg, var(--blush) 0%, #FAF0EE 100%);
+    border-left: 3px solid var(--gold);
+    padding: 18px 22px;
+    border-radius: 0 14px 14px 0;
+    font-style: italic;
+    color: var(--burgundy);
+  }
+
+  .promise-box {
+    margin-top: 26px;
+    background: #FFF9F5;
+    border: 1px solid var(--gold-light);
+    border-radius: 16px;
+    padding: 26px 22px;
+    text-align: center;
+  }
+
+  .promise-phrase {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.35rem, 3.8vw, 1.85rem);
+    color: var(--burgundy);
+    margin-bottom: 16px;
+    transition: all 0.5s ease;
+  }
+
+  .promise-phrase span.strike { text-decoration: line-through; color: var(--text-muted); opacity: 0.7; }
+  .promise-phrase span.active-va {
+    color: var(--burgundy);
+    font-weight: 700;
+    background: linear-gradient(transparent 60%, rgba(200, 155, 110, 0.35) 60%);
+    padding: 0 6px;
+  }
+
+  .btn-promise {
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--burgundy);
+    padding: 11px 24px;
+    border-radius: 40px;
+    font-family: 'Lora', serif;
+    font-size: 0.94rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-promise:hover { background: var(--gold); color: #fff; }
+
+  .promise-note {
+    margin-top: 16px;
+    font-size: 0.96rem;
+    color: var(--text-muted);
+    display: none;
+    animation: fadeIn 0.6s ease forwards;
+  }
+  .promise-note.visible { display: block; }
+
+  /* Galería de fotos fijas */
+  section.memories-section { padding: 55px 0 35px; }
+  .memories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+    margin-top: 26px;
+  }
+
+  .polaroid-card {
+    background: #FFFDFB;
+    border: 1px solid var(--blush-deep);
+    border-radius: 16px;
+    padding: 14px 14px 20px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .polaroid-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: #F4ECEA;
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .photo-caption { margin-top: 14px; text-align: center; }
+  .photo-caption h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.06rem;
+    color: var(--burgundy);
+    margin-bottom: 4px;
+  }
+  .photo-caption p { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+  /* Cierre */
+  footer.closing { padding: 45px 0 90px; text-align: center; }
+  .closing-card {
+    background: linear-gradient(160deg, #FFFDFB 0%, #F7EAE8 100%);
+    border: 1px solid var(--blush-deep);
+    border-radius: 24px;
+    padding: 42px 30px;
+    box-shadow: var(--shadow-soft);
+  }
+  .closing-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.15rem);
+    color: var(--burgundy);
+    margin-bottom: 18px;
+  }
+  .closing-card p { max-width: 600px; margin: 0 auto 18px; color: var(--text-main); font-size: 1.03rem; }
+
+  .btn-seal {
+    margin-top: 14px;
+    background: var(--burgundy);
+    color: var(--cream);
+    border: none;
+    padding: 15px 32px;
+    border-radius: 50px;
+    font-family: 'Lora', serif;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    box-shadow: 0 10px 24px rgba(74, 28, 36, 0.18);
+  }
+  .btn-seal:hover { background: var(--burgundy-soft); transform: translateY(-2px); }
+
+  .final-note {
+    display: none;
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(200, 155, 110, 0.4);
+    font-style: italic;
+    color: var(--burgundy);
+    font-size: 1.06rem;
+    animation: fadeIn 0.8s ease forwards;
+  }
+  .final-note.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .chapter-header { padding: 22px 20px; }
+    .chapter-content { padding: 4px 20px 26px; }
+    .closing-card { padding: 34px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<!-- ETAPA 1: PORTADA -->
+<header id="etapa-1" class="hero">
+  <div class="container">
+    <span class="eyebrow">Para ti, Eve • Sin escudos ni excusas</span>
+    <h1 class="title">No escribo esto para justificarme,<br>sino para <em>pedirte perdón de frente</em></h1>
+    <p class="hero-sub">
+      Llevo días con la mente hecha un nudo, sabiendo que mis actitudes te lastimaron. Léelo solo cuando tengas calma; no te pido nada, solo quería dejar aquí la verdad de lo que siento por ti.
+    </p>
+    <div class="divider-ornament"></div>
+    <button class="btn-start" onclick="goToStage('etapa-2', this)">
+      Abrir esta carta despacio
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ETAPA 2: CAPÍTULOS PROFUNDOS -->
+  <section id="etapa-2" class="chapter-section stage-hidden">
+    <div class="section-intro">
+      <h2>Lo que necesito decirte con el corazón en la mano</h2>
+      <p>Toca cada apartado para abrirlo con calma.</p>
+    </div>
+
+    <div class="accordion-list">
+
+      <!-- Capítulo I -->
+      <article class="chapter-card open">
+        <button class="chapter-header" aria-expanded="true" onclick="toggleChapter(this)">
+          <div>
+            <span class="chapter-meta">Capítulo I • Asumir mis errores</span>
+            <h3 class="chapter-title">Mis errores y mi decisión de cambiar</h3>
+          </div>
+          <span class="chapter-icon">+</span>
+        </button>
+        <div class="chapter-body" style="max-height: 1500px;">
+          <div class="chapter-content">
+            <p>
+              Estos días he sentido que algo dentro de mi cabeza no estaba en orden, y en lugar de detenerme a respirar, dejé que esa torpeza saliera en forma de necedad, de insistencia y de actitudes que sé perfectamente que te cansan y te lastiman. Cuando me dijiste que te molestaba que dijera eso, en el momento quise hacerme el fuerte, pero la verdad es que me dolió en el alma darme cuenta de que otra vez fui yo quien puso una piedra donde solo debería haber paz.
+            </p>
+            <p>
+              No tengo excusa ante ti. Sé que he fallado y que con mis tonterías he hecho llorar a mi princesa, a mi niña hermosa, a la mujer que más admiro y quiero en este mundo. También quiero pedirte perdón por algo tan tonto como haber movido a mi cuenta aquel accesorio del juego que tanto te gusta; fue una estupidez que hice por probar una cosa sin pensar, y enseguida entendí lo mal que estuvo tocar algo que era tuyo y que te hacía ilusión. Perdóname por haber actuado así con la niña con la que quiero vivir eternamente a su lado.
+            </p>
+            <p>
+              Sé cómo eres y entiendo que después de tantas idioteces puedas sentir cansancio o dudar. Pero estoy convencido de que <strong>una sola decisión puede cambiar el rumbo entero de una vida</strong>, y mi decisión firme es cambiar mi manera de actuar contigo, dejar atrás cada actitud mediocre y aprender a cuidarte como mereces, porque quiero amarte todo el tiempo que Dios me conceda de vida.
+            </p>
+            <div class="highlight-box">
+              “No busco que olvides mis errores de un segundo a otro; solo quiero demostrarte con hechos que estoy dispuesto a corregir cada paso antes de volver a lastimarte.”
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Capítulo II -->
+      <article class="chapter-card">
+        <button class="chapter-header" aria-expanded="false" onclick="toggleChapter(this)">
+          <div>
+            <span class="chapter-meta">Capítulo II • Cómo te veo y lo que extraño</span>
+            <h3 class="chapter-title">Cómo te miro de verdad — sin sombras ni dudas</h3>
+          </div>
+          <span class="chapter-icon">+</span>
+        </button>
+        <div class="chapter-body">
+          <div class="chapter-content">
+            <p>
+              Me partió el corazón saber que en algún momento llegaste a pensar que yo te miraba de otra manera. Reconozco que con mis torpezas pude haberte dado motivos para dudar, y me duele haber sembrado esa sombra en tu mente. Si pudieras verte a través de mis ojos un solo segundo, sabrías que no existe nada más limpio, más tierno y más profundo que la forma en que te miro: te veo como mi niña hermosa, mi chiquita hermosa, la mujer de mis sueños y el regalo más bonito que la vida me dio cuando más lo necesitaba. Los ojos no mienten, Eve.
+            </p>
+            <p>
+              Y te confieso algo con toda honestidad: me duele mucho cuando siento tu distancia, cuando me ignoras o cuando evitas que me acerque a ti, aunque entiendo que muchas veces es consecuencia de mis propias estupideces. Yo amo profundamente cada muestra de cariño contigo: abrazarte, darte un besito en la mejilla o en la frente, tomar tu mano o caminar tomado de tu brazo. Esos momentos sencillos contigo son mi lugar favorito en el mundo.
+            </p>
+            <div class="highlight-box">
+              “No quiero ser alguien de quien tengas que protegerte o alejarte; quiero volver a ser ese lugar seguro donde puedas apoyar la cabeza y sentirte cuidada.”
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Capítulo III -->
+      <article class="chapter-card">
+        <button class="chapter-header" aria-expanded="false" onclick="toggleChapter(this)">
+          <div>
+            <span class="chapter-meta">Capítulo III • Mi promesa intacta</span>
+            <h3 class="chapter-title">El miedo más grande y lo que anhelo construir contigo</h3>
+          </div>
+          <span class="chapter-icon">+</span>
+        </button>
+        <div class="chapter-body">
+          <div class="chapter-content">
+            <p>
+              Sé que la vida inevitablemente pone pruebas en el camino de quienes se aman, pero lo que más me aterra no son los obstáculos de afuera, sino que mis propios errores terminen alejándote de mí. No soportaría el día en que me dijeras que ya no quieres saber nada de mí o que decidiste olvidarme, porque no me imagino cómo sería caminar por la vida si no estás tú ahí para vivirla conmigo.
+            </p>
+            <p>
+              Alguna vez hice una promesa contigo: formar un hogar, una familia que tenga un pedacito de ti y un pedacito de mí para crear un pedacito nuestro. Yo cumplo mis promesas, y esa esperanza sigue intacta en mi pecho.
+            </p>
+
+            <div class="promise-box">
+              <div class="promise-phrase" id="promisePhrase">
+                “Algún día <span class="strike">iba a ser</span> contigo...”
+              </div>
+              <button class="btn-promise" id="btnPromise" onclick="transformPromise()">
+                Tocar para reafirmar la promesa
+              </button>
+              <p class="promise-note" id="promiseNote">
+                No se va a quedar en un “iba a ser”. Sigo creyendo, trabajando y corrigiéndome cada día con la certeza de que <strong>VA a ser contigo</strong>, porque eres tú con quien quiero construir toda una vida.
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Paso controlado hacia Etapa 3 (Galería y cierre) -->
+    <div class="stage-gate">
+      <span class="stage-gate-hint">Cuando termines de leer estas palabras, sigue al último apartado</span>
+      <button class="btn-next-stage" onclick="goToStage('etapa-3', this)">
+        Ir a nuestros recuerdos y el cierre
+      </button>
+    </div>
+  </section>
+
+  <!-- ETAPA 3: GALERÍA DE FOTOS FIJAS + CIERRE -->
+  <div id="etapa-3" class="stage-hidden">
+
+    <section class="memories-section">
+      <div class="section-intro">
+        <h2>Lo que somos cuando estamos bien</h2>
+        <p>Un rincón guardado para nuestros mejores momentos juntos.</p>
+      </div>
+
+      <div class="memories-grid">
+
+        <!-- FOTO 1: Reemplaza "foto1.jpg" con el nombre de tu archivo -->
+        <div class="polaroid-card">
+          <div class="photo-frame">
+            <img src="foto1.jpg" alt="Nosotros 1">
+          </div>
+          <div class="photo-caption">
+            <h4>Tu sonrisa</h4>
+            <p>El motivo por el que vale la pena corregir cada error.</p>
+          </div>
+        </div>
+
+        <!-- FOTO 2: Reemplaza "foto2.jpg" con el nombre de tu archivo -->
+        <div class="polaroid-card">
+          <div class="photo-frame">
+            <img src="foto2.jpg" alt="Nosotros 2">
+          </div>
+          <div class="photo-caption">
+            <h4>Nuestros momentos</h4>
+            <p>Cada abrazo y cada instante tomado de tu mano.</p>
+          </div>
+        </div>
+
+        <!-- FOTO 3: Reemplaza "foto3.jpg" con el nombre de tu archivo -->
+        <div class="polaroid-card">
+          <div class="photo-frame">
+            <img src="foto3.jpg" alt="Nosotros 3">
+          </div>
+          <div class="photo-caption">
+            <h4>Lo que quiero cuidar</h4>
+            <p>La historia que no me pienso rendir en construir contigo.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="closing">
+      <div class="closing-card">
+        <h2>Solo quiero estar ahí para ti</h2>
+        <p>
+          Con las prisas de todo no me dio tiempo de organizar algo más grande, así que quise dejarte este detalle sencillo pero sincero. Lo único que deseo es estar ahí frente a ti para decirte con calma todo lo que mi corazoncito guarda, sin peleas y sin excusas, porque pase lo que pase, no me voy a rendir contigo.
+        </p>
+        <button class="btn-seal" onclick="revealFinalNote()">
+          Aquí está mi corazoncito abierto ❤️‍🩹
+        </button>
+        <div class="final-note" id="finalNote">
+          Gracias por leer hasta aquí, mi niña hermosa💗. Sin prisas y sin presión: ahí estaré para decirte de frente todo lo que siento, porque contigo nunca me voy a rendir.
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+</main>
+
+<script>
+  const particlesContainer = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 60 + 25;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (Math.random() * 16 + 14) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    particlesContainer.appendChild(p);
+  }
+
+  function goToStage(stageId, triggerBtn) {
+    const target = document.getElementById(stageId);
+    if (!target) return;
+
+    if (target.classList.contains('stage-hidden')) {
+      target.classList.remove('stage-hidden');
+      target.classList.add('stage-visible');
+    }
+
+    if (triggerBtn && triggerBtn.classList.contains('btn-next-stage')) {
+      triggerBtn.style.opacity = '0.65';
+      triggerBtn.textContent = 'Desbloqueado ↓';
+    }
+
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
+  function toggleChapter(btn) {
+    const card = btn.parentElement;
+    const body = card.querySelector('.chapter-body');
+    const isOpen = card.classList.contains('open');
+
+    if (isOpen) {
+      card.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      body.style.maxHeight = null;
+    } else {
+      card.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  }
+
+  function transformPromise() {
+    const phrase = document.getElementById('promisePhrase');
+    const note = document.getElementById('promiseNote');
+    const btn = document.getElementById('btnPromise');
+
+    phrase.innerHTML = '“No se queda en un <span class="strike">iba a ser</span>: <span class="active-va">VA a ser contigo</span>.”';
+    note.classList.add('visible');
+    btn.textContent = 'Promesa reafirmada de corazón';
+    btn.style.background = '#C89B6E';
+    btn.style.color = '#FFF';
+
+    const body = btn.closest('.chapter-body');
+    if (body) body.style.maxHeight = body.scrollHeight + 'px';
+  }
+
+  function revealFinalNote() {
+    document.getElementById('finalNote').classList.add('visible');
+  }
+</script>
+</body>
+</html>
